@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="layout_after_login.xhtml">
+    <ui:define name="title" >Welcome</ui:define>
+    <ui:define name="content">
+        <h:form id="bookForm">
+            <h:outputText value="Welcome #{studentFormBean.studentStatefullSessionBean.student.firstName}"/>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Browse books : "/>
+                <h:link outcome="BrowseBooksStudents.xhtml" value="Browse books"/>
+                <h:outputLabel value="Change password : "/>
+                <h:link outcome="ChangePasswordStudents.xhtml" value="Change password"/>
+                <h:outputLabel value="Books you have currently lend : "/>
+                <h:link outcome="reportProblem.xhtml" value="Report a problem to an admin"/>
+                <h:outputLabel value="Books you have currently lend : "/>
+
+            </h:panelGrid>
+
+        </h:form>
+
+    </ui:define>
+</ui:composition>
+</html>
