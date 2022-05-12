@@ -23,6 +23,15 @@ public class StudentFormBean {
     @Inject
     private StudentStatefullSessionBean studentStatefullSessionBean;
 
+    public boolean isReportproblem() {
+        return reportproblem;
+    }
+
+    public void setReportproblem(boolean reportproblem) {
+        this.reportproblem = reportproblem;
+    }
+
+    private boolean reportproblem;
 
     private Student student = new Student();
 
