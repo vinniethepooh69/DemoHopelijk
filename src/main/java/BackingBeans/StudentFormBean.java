@@ -45,17 +45,25 @@ public class StudentFormBean {
     {
 
     }
-    public String addStudent() {
-        studentEJBBean.PersistStudent(student);
+    public void addStudent() {
+        boolean b = studentEJBBean.PersistStudent(student);
+        if(b==true)
+        {
         FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "student added","Student is succesfully added"));
         FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Please return to home page before logging in","Student is succesfully added"));
-        return "contact.xhtml";
 
+    }
+        else{
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error","YOU ARE NOT REGISTERED"));
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Make sure studentnumber is a unique value","Student is succesfully added"));
+
+
+        }
     }
     public String loginStudent() {
         student = studentEJBBean.Login_student(inlogPassword,inlogStudent);
 
-        if(student.getStudentNumber().equals("r0000000"))
+        if(student.getPersonUserNumber().equals("r0000000"))
         {
             student.resetStudentValues();
 

@@ -18,10 +18,22 @@ public class StudentEJBBean {
     {
 
     }
-    public void PersistStudent(Student student)
+    public boolean PersistStudent(Student student)
     {
-        em.persist(student);
-        em.flush();
+        Query query = em.createNamedQuery("findWithParam",Student.class);
+        query.setParameter("fname",student.getPersonUserNumber());
+        if(query.getResultList().size() !=0)
+        {
+            return false;
+        }
+        else{
+
+            em.persist(student);
+            em.flush();
+            return true;
+        }
+
+
     }
     public Student Login_student(String password, String studentNumber)
     {
