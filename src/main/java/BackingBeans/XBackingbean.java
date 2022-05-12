@@ -8,6 +8,7 @@ import jakarta.inject.Named;
 public class XBackingbean {
 
     private String show;
+    private String show2;
 
     public String getShow() {
         return show;
