@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="layout_minimal.xhtml">
+    <ui:define name="content">
+
+    <h1>Create a book</h1>
+        <h:outputLabel id="titlerender" value="#{adminFormBean.adminStatefullSessionBean.retrieveBookFormTitle()}"/>
+        <h:form id="bookForm">
+            <c:choose>
+                <c:when test="#{adminFormBean.adminStatefullSessionBean.continueForm==false}">
+
+            <h:panelGrid columns="2">
+                <h:outputLabel  value="Title of book: "/>
+                <h:inputText value="#{adminFormBean.book.title_of_Book}" required="true">
+                    <f:validateLength minimum="2" maximum="60"/>
+                </h:inputText>
+                <h:outputLabel value="subject : "/>
+                <h:inputText value="#{adminFormBean.book.subject}" required="true">
+                    <f:validateLength minimum="2" maximum="20"/>
+
+                </h:inputText>
+                <h:outputLabel value="number of pages : "/>
+                <h:inputText value="#{adminFormBean.book.numberOfPages}" required="true">
+                    <f:validateLength minimum="2" maximum="20"/>
+
+                </h:inputText>
+                <h:outputLabel value="Fiction? : "/>
+                <h:selectBooleanCheckbox value="#{adminFormBean.book.fiction}" >
+
+                </h:selectBooleanCheckbox>
+                <h:outputLabel value="language : "/>
+                <h:inputText value="#{adminFormBean.book.language}">
+                    <f:validateLength minimum="2" maximum="20"/>
+
+                </h:inputText>
+            </h:panelGrid>
+            <h:commandButton value="Next page!" action="#{adminFormBean.NextPage()}">
+                <f:ajax execute="@form" render=":bookForm :titlerender :extratest :errors"/>
+            </h:commandButton>
+            </c:when>
+            <c:otherwise>
+                <h:dataTable value="#{adminFormBean.adminStatefullSessionBean.getAllAuthors()}" var="author_value"  border="1">
+
+                    <h:column>
+                        <f:facet name="header">
+
+                            <h:outputText value="Author First Name"/>
+                        </f:facet>
+                        <h:outputText value="#{author_value.getFirstName()}"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Author Last Name"/>
+                        </f:facet>
+                        <h:outputText value="#{author_value.getLastName()}"/>
+                    </h:column>
+
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Author user number"/>
+                        </f:facet>
+                        <h:outputText value="#{author_value.getPersonUserNumber()}"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Author email"/>
+                        </f:facet>
+                        <h:outputText value="#{author_value.getEmail()}"/>
+                    </h:column>
+                    <h:column>
+                        <h:commandButton value="Register author" action="#{adminFormBean.assignAuthorToBook(author_value.getPersonID())}">
+                            <f:ajax execute="@form" render=":bookForm :titlerender :extratest :bookform :errors"/>
+                        </h:commandButton>
+
+                    </h:column>
+                </h:dataTable>
+
+
+                <h:dataTable value="#{adminFormBean.adminStatefullSessionBean.book.createdByAuthors}" var="author_value"  border="1">
+
+                    <h:column>
+                        <f:facet name="header">
+
+                            <h:outputText value="Author First Name"/>
+                        </f:facet>
+                        <h:outputText value="#{author_value.getFirstName()}"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Author Last Name"/>
+                        </f:facet>
+                        <h:outputText value="#{author_value.getLastName()}"/>
+                    </h:column>
+
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Author user number"/>
+                        </f:facet>
+                        <h:outputText value="#{author_value.getPersonUserNumber()}"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Author email"/>
+                        </f:facet>
+                        <h:outputText value="#{author_value.getEmail()}"/>
+                    </h:column>
+
+                </h:dataTable>
+
+
+                <h:commandButton value="Next page!" action="#{adminFormBean.persistBook()}">
+                    <f:ajax execute="@form" render=":bookForm :titlerender :extratest :errors"/>
+                </h:commandButton>
+
+
+
+            </c:otherwise>
+            </c:choose>
+
+        </h:form>
+        <h:outputLabel id="extratest" value="#{adminFormBean.adminStatefullSessionBean.continueForm}"/>
+    </ui:define>
+</ui:composition>
+</html>
