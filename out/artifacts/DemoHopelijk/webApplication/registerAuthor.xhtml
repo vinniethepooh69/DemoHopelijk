@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="layout_standard.xhtml">
+    <ui:define name="title">Create a new Author</ui:define>
+    <ui:define name="content">
+        <h:form id="bookForm">
+            <h:panelGrid columns="2">
+                <h:outputLabel  value="Author number: "/>
+                <h:inputText value="#{adminFormBean.author.personUserNumber}" required="true">
+                    <f:validateLength minimum="8" maximum="8"/>
+                </h:inputText>
+                <h:outputLabel value="firstname : "/>
+                <h:inputText value="#{adminFormBean.author.firstName}" required="true">
+                    <f:validateLength minimum="2" maximum="20"/>
+
+                </h:inputText>
+                <h:outputLabel value="lastname : "/>
+                <h:inputText value="#{adminFormBean.author.lastName}" required="true">
+                    <f:validateLength minimum="2" maximum="20"/>
+
+                </h:inputText>
+                <h:outputLabel value="Email : "/>
+                <h:inputText value="#{adminFormBean.author.email}" required="true">
+                    <f:validateLength minimum="8" maximum="50"/>
+
+                </h:inputText>
+                <h:outputLabel value="phonenumber : "/>
+                <h:inputText value="#{adminFormBean.author.phoneNumber}">
+                    <f:validateLength minimum="10" maximum="10"/>
+
+                </h:inputText>
+                <h:outputLabel value="password : "/>
+                <h:inputSecret value="#{adminFormBean.author.password}" required="true">
+                    <f:validateLength minimum="8" maximum="20"/>
+
+                </h:inputSecret>
+
+
+
+            </h:panelGrid>
+            <h:commandButton value="Register now!" action="#{adminFormBean.createAuthor()}">
+                <f:ajax execute="@form" render=":succes :bookform :errors"/>
+            </h:commandButton>
+
+        </h:form>
+        <h:outputLabel id="succes" value="#{adminFormBean.adminEJBBean.test} + #{adminFormBean.inlogAdmin}  " />
+    </ui:define>
+</ui:composition>
+</html>
