@@ -1,8 +1,11 @@
 package BackingBeans;
 
 import classes.Admin;
+import classes.Author;
+import classes.Book;
 import classes.Student;
 import EJB.AdminEJBBean;
+import EJB.AdminStatefullSessionBean;
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
@@ -18,20 +21,60 @@ public class AdminFormBean {
     @Inject
     private AdminEJBBean AdminEJBBean;
 
+    @Inject
+    private AdminStatefullSessionBean adminStatefullSessionBean;
 
+    public AdminStatefullSessionBean getAdminStatefullSessionBean() {
+        return adminStatefullSessionBean;
+    }
+
+    public void setAdminStatefullSessionBean(AdminStatefullSessionBean adminStatefullSessionBean) {
+        this.adminStatefullSessionBean = adminStatefullSessionBean;
+    }
 //@Inject
     //private StudentStatefullSessionBean studentStatefullSessionBean;
 
 
-    private boolean reportproblem;
 
     private Admin admin = new Admin();
 
-    private String inlogAdmin;
+    private Book book= new Book();
+
+    private Author author = new Author();
+    private String inlogAdmin="test";
     private String inlogPassword;
 
+    public void createBook()
+    {
+        inlogAdmin="ietsal";
+
+        AdminEJBBean.createBook(book);
+        FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "student added","This amazing book has been added to our collection, nice job!"));
+        FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Please return to home page before logging in","Let's see how long it takes before it gets reserved :p"));
+
+    }
+
+    public void createAuthor()
+    {
+        boolean b = AdminEJBBean.persistAuthor(author);
+        if(b==true)
+        {
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "author added","author is succesfully added"));
+
+        }
+        else{
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error","AUTHOR is ARE NOT REGISTERED"));
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Make sure author usernummer is a unique value","Make sure author usernummer is a unique value"));
+
+
+        }
+
+
+    }
 
     public void addAdmin() {
+        inlogAdmin = "jaj?";
+
         boolean b = AdminEJBBean.PersistAdmin(admin);
         if(b==true)
         {
@@ -56,14 +99,36 @@ public class AdminFormBean {
             return "badInlog.xhtml";
         }
         else{
-            //studentStatefullSessionBean.assignStudent(student);
+            adminStatefullSessionBean.setAdmin(admin);
             //student.resetStudentValues();
-            return "goodInlogStudent.xhtml";
+            return "goodInlogAdmin.xhtml";
         }
+
 
         //return "test2.xhtml";
 
 
+    }
+    public void NextPage()
+    {
+        adminStatefullSessionBean.setBook(book);
+        adminStatefullSessionBean.setContinueForm(true);
+
+    }
+
+    public void persistBook()
+    {
+        adminStatefullSessionBean.persistBook();
+    }
+    public void assignAuthorToBook(int authorID)
+    {
+        adminStatefullSessionBean.assignAuthorToBook(authorID);
+
+    }
+    public String testfunctie()
+    {
+        resetInlog();
+        return "Home.xhtml";
     }
     public void resetInlog()
     {
@@ -72,12 +137,13 @@ public class AdminFormBean {
     }
 
 
+    public Author getAuthor() {
+        return author;
+    }
 
-
-
-
-
-
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
 
     public String getInlogPassword() {
         return inlogPassword;
@@ -96,13 +162,6 @@ public class AdminFormBean {
         AdminEJBBean = adminEJBBean;
     }
 
-    public boolean isReportproblem() {
-        return reportproblem;
-    }
-
-    public void setReportproblem(boolean reportproblem) {
-        this.reportproblem = reportproblem;
-    }
 
     public Admin getAdmin() {
         return admin;
@@ -119,5 +178,18 @@ public class AdminFormBean {
     public void setInlogAdmin(String inlogAdmin) {
         this.inlogAdmin = inlogAdmin;
     }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+
+
     // Getters, setters
+
+
 }

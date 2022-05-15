@@ -6,41 +6,36 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <ui:composition template="layout_standard.xhtml">
-    <ui:define name="title">Create a new Admin</ui:define>
+    <ui:define name="title">Create a new Author</ui:define>
     <ui:define name="content">
         <h:form id="bookForm">
             <h:panelGrid columns="2">
-                <h:outputLabel id = "AdminNumber" value="AdminNumber: "/>
-                <h:inputText value="#{adminFormBean.admin.personUserNumber}" required="true">
+                <h:outputLabel  value="Author number: "/>
+                <h:inputText value="#{adminFormBean.author.personUserNumber}" required="true">
                     <f:validateLength minimum="8" maximum="8"/>
                 </h:inputText>
                 <h:outputLabel value="firstname : "/>
-                <h:inputText value="#{adminFormBean.admin.firstName}" required="true">
+                <h:inputText value="#{adminFormBean.author.firstName}" required="true">
                     <f:validateLength minimum="2" maximum="20"/>
 
                 </h:inputText>
                 <h:outputLabel value="lastname : "/>
-                <h:inputText value="#{adminFormBean.admin.lastName}" required="true">
+                <h:inputText value="#{adminFormBean.author.lastName}" required="true">
                     <f:validateLength minimum="2" maximum="20"/>
 
                 </h:inputText>
                 <h:outputLabel value="Email : "/>
-                <h:inputText value="#{adminFormBean.admin.email}" required="true">
+                <h:inputText value="#{adminFormBean.author.email}" required="true">
                     <f:validateLength minimum="8" maximum="50"/>
 
                 </h:inputText>
                 <h:outputLabel value="phonenumber : "/>
-                <h:inputText value="#{adminFormBean.admin.phoneNumber}">
+                <h:inputText value="#{adminFormBean.author.phoneNumber}">
                     <f:validateLength minimum="10" maximum="10"/>
 
                 </h:inputText>
-                <h:outputLabel value="SecurityCode : "/>
-                <h:inputText value="#{adminFormBean.admin.securityCode}">
-                    <f:validateLength minimum="4" maximum="6"/>
-
-                </h:inputText>
                 <h:outputLabel value="password : "/>
-                <h:inputSecret value="#{adminFormBean.admin.password}" required="true">
+                <h:inputSecret value="#{adminFormBean.author.password}" required="true">
                     <f:validateLength minimum="8" maximum="20"/>
 
                 </h:inputSecret>
@@ -48,8 +43,8 @@
 
 
             </h:panelGrid>
-            <h:commandButton value="Register now!" action="#{adminFormBean.addAdmin()}">
-                <f:ajax execute="@form" render=":succes :errors"/>
+            <h:commandButton value="Register now!" action="#{adminFormBean.createAuthor()}">
+                <f:ajax execute="@form" render=":succes :bookform :errors"/>
             </h:commandButton>
 
         </h:form>

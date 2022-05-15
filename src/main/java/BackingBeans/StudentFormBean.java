@@ -1,6 +1,7 @@
 package BackingBeans;
 
 import EJB.StudentEJBBean;
+import classes.Book;
 import classes.Student;
 import EJB.StudentStatefullSessionBean;
 import jakarta.ejb.EJB;
@@ -18,8 +19,6 @@ public class StudentFormBean {
     @Inject
     private StudentEJBBean studentEJBBean;
 
-
-
     @Inject
     private StudentStatefullSessionBean studentStatefullSessionBean;
 
@@ -36,7 +35,15 @@ public class StudentFormBean {
     private Student student = new Student();
 
 
+    public int getBookIDforBrowsing() {
+        return bookIDforBrowsing;
+    }
 
+    public void setBookIDforBrowsing(int bookIDforBrowsing) {
+        this.bookIDforBrowsing = bookIDforBrowsing;
+    }
+
+    private int bookIDforBrowsing;
 
     private String inlogStudent;
     private String inlogPassword;
@@ -45,6 +52,9 @@ public class StudentFormBean {
     {
 
     }
+
+
+
     public void addStudent() {
         boolean b = studentEJBBean.PersistStudent(student);
         if(b==true)
@@ -60,6 +70,25 @@ public class StudentFormBean {
 
         }
     }
+
+
+    public void previousBook() {
+        //book = studentEJBBean.retrievefirstbook();
+
+        //Book hulpboek = studentStatefullSessionBean.testquery();
+        //inlogPassword="gelukt";
+        studentStatefullSessionBean.retrieveBook(-1);
+
+    }
+    public void nextBook()
+    {
+        //book = studentEJBBean.retrievefirstbook();
+
+        //Book hulpboek = studentStatefullSessionBean.testquery();
+        //inlogPassword="gelukt";
+        studentStatefullSessionBean.retrieveBook(1);
+
+    }
     public String loginStudent() {
         student = studentEJBBean.Login_student(inlogPassword,inlogStudent);
 
@@ -70,8 +99,8 @@ public class StudentFormBean {
             return "badInlog.xhtml";
         }
         else{
-            studentStatefullSessionBean.assignStudent(student);
-            student.resetStudentValues();
+            studentStatefullSessionBean.assignStudent(student.getPersonID());
+            //student.resetStudentValues();
             return "goodInlogStudent.xhtml";
         }
 
@@ -79,6 +108,31 @@ public class StudentFormBean {
 
 
     }
+
+    public void retrieveAllLendBooksByStudent()
+    {
+        inlogPassword = "hoera";
+
+        studentStatefullSessionBean.retrieveAllLendBooksByUser();
+    }
+
+    public void returnBook(int index)
+    {
+        studentStatefullSessionBean.returnBook(index);
+    }
+
+    public String registerLendOfBook()
+    {
+        studentStatefullSessionBean.registerLendOfBook();
+        return "succesfulBookLend.xhtml";
+
+    }
+
+    public void testfunctie()
+    {
+        studentStatefullSessionBean.testfunctie();
+    }
+
     public void resetStudent()
     {
         student.resetStudentValues();

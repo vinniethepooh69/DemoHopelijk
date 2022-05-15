@@ -7,41 +7,22 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <f:view>
-    <h:form id="testform">
+    <h:form id="test2">
     <h:outputLabel value="Hello, world"/>
 
     <br/>
-    <h:outputLabel value="#{studentFormBean.student.studentID}"/>
-    <h:outputLabel value="#{Bean.show()}"/>
+    <br/>
+
+    <h:outputLabel value="#{studentFormBean.book.title_of_Book}"/>
 
     <br/>
 
-    <h:outputLabel value="#{studentFormBean.student.studentNumber}"/>
-
-    <br/>
-
-    <h:outputLabel value="#{studentFormBean.student.department}"/>
-
-    <br/>
-
-    <h:outputLabel value="#{studentFormBean.student.phoneNumber}"/>
-
-    <br/>
-
-    <h:outputLabel value="#{studentFormBean.student.email}"/>
-
-    <br/>
-
-    <h:outputLabel value="#{studentFormBean.student.noOfBooksLend}"/>
-
-    <br/>
-
-    <h:outputLabel value="#{studentFormBean.student.password}"/>
+    <h:outputLabel value="#{studentFormBean.book.bookID}"/>
 
     <br/>
 
 
-    <h:commandButton value="Create a default student" action="#{studentFormBean.addStudent()}"/>
+    <h:commandButton value="Request firt book" action="#{studentFormBean.firstbook()}"/>
     <br/>
     <h:commandButton value="Create a default student" action="#{studentFormBean.creatstudent()}"/>
     <br/>
@@ -50,7 +31,7 @@
     <h:link outcome="inlogAdmin.xhtml" value="Login Admin"/>
 
     <h:commandButton value="Create a book" action="#{studentFormBean.setReportproblem(true)}">
-        <f:ajax execute="@form" render="test"/>
+        <f:ajax execute="@form" render="test2"/>
     </h:commandButton>
     </h:form>
     <h:form id="test">

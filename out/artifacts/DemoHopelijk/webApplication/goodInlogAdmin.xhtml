@@ -7,21 +7,17 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <ui:composition template="layout_after_login.xhtml">
-    <ui:define name="title" >Welcome</ui:define>
+    <ui:define name="title" >Welcome Admin</ui:define>
     <ui:define name="content">
         <h:form id="bookForm">
             <h:outputText value="Welcome #{studentFormBean.studentStatefullSessionBean.student.firstName}"/>
             <h:panelGrid columns="2">
-                <h:outputLabel value="Browse books : "/>
-                <h:link outcome="BrowseBooksAdmins.xhtml" value="Browse books"/>
                 <h:outputLabel value="Add books : "/>
-                <h:link outcome="addBooks.xhtml" value="Add books"/>
+                <h:link outcome="registerBook.xhtml" value="Add books"/>
                 <h:outputLabel value="Display lend books : "/>
                 <h:link outcome="displayLend.xhtml" value="Display lend books"/>
-                <h:outputLabel value="Return books : "/>
-                <h:link outcome="returnBooks.xhtml" value="Return books"/>
                 <h:outputLabel value="Add Admin : "/>
-                <h:link outcome="addAdmin.xhtml" value="Add admin"/>
+                <h:link outcome="registerAdmin.xhtml" value="Add admin"/>
 
             </h:panelGrid>
 
