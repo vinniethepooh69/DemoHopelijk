@@ -100,6 +100,8 @@ public class StudentFormBean {
         }
         else{
             studentStatefullSessionBean.assignStudent(student.getPersonID());
+            studentStatefullSessionBean.setLowestBookID(studentEJBBean.returnlowestbookid());
+            studentStatefullSessionBean.initialisation();
             //student.resetStudentValues();
             return "goodInlogStudent.xhtml";
         }

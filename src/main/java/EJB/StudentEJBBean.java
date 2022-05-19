@@ -16,6 +16,12 @@ public class StudentEJBBean {
     @PersistenceContext(unitName = "hellodemo")
     EntityManager em;
 
+
+    public int returnlowestbookid()
+    {
+        return (int) em.createNamedQuery("findMinBookID").getSingleResult();
+
+    }
     public StudentEJBBean()
     {
 
