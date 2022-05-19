@@ -34,7 +34,8 @@ public class AdminEJBBean {
     }
     public boolean PersistAdmin(Admin admin)
     {
-        test = "yolo";
+
+        /*test = "yolo";
         Query query = em.createNamedQuery("findAdminWithParam",Admin.class);
         query.setParameter("fname",admin.getPersonUserNumber());
         if(query.getResultList().size() !=0)
@@ -42,11 +43,11 @@ public class AdminEJBBean {
             return false;
         }
         else{
-
+            */
             em.persist(admin);
             em.flush();
             return true;
-        }
+
 
 
     }

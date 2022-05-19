@@ -23,18 +23,19 @@ public class StudentEJBBean {
 
     public boolean PersistStudent(Student student)
     {
+        /*
         Query query = em.createNamedQuery("findStudentWithParam",Student.class);
         query.setParameter("fname",student.getPersonUserNumber());
         if(query.getResultList().size() !=0)
         {
             return false;
         }
-        else{
+        else{*/
 
             em.persist(student);
             em.flush();
             return true;
-        }
+
 
 
     }

@@ -18,6 +18,7 @@ public class Book {
     private Integer BookID;
 
 
+    @Column(nullable = false, unique = true)
     private String title_of_Book;
     private int numberOfPages;
     private String language; //later mss enum maken: engels/nederlands/frans
