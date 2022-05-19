@@ -6,7 +6,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-<ui:composition template="layout_after_login.xhtml">
+<ui:composition template="layout_after_login_student.xhtml">
     <ui:define name="title" >Welcome Admin</ui:define>
     <ui:define name="content">
         <h:form id="bookForm">
@@ -14,8 +14,8 @@
             <h:panelGrid columns="2">
                 <h:outputLabel value="Add books : "/>
                 <h:link outcome="registerBook.xhtml" value="Add books"/>
-                <h:outputLabel value="Display lend books : "/>
-                <h:link outcome="displayLend.xhtml" value="Display lend books"/>
+                <h:outputLabel value="Add Authors : "/>
+                <h:link outcome="registerAuthor.xhtml" value="Add Authors"/>
                 <h:outputLabel value="Add Admin : "/>
                 <h:link outcome="registerAdmin.xhtml" value="Add admin"/>
 

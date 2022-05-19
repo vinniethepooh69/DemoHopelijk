@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NamedQuery(name = "findAuthorByID", query = "SELECT a FROM Author a where a.personID=?1")
+@NamedQuery(name = "findAuthorByUserNumber", query = "SELECT a FROM Author a where a.personUserNumber=:fname")
 @NamedQuery(name= "getAllAuthors",query = "SELECT a FROM Author a")
 @Entity
 @Table(name="Author")
@@ -32,6 +33,18 @@ public class Author extends Person {
     {
         ContributedToTheseBooks.add(ContributedToTheseBooks.size(),bookvalue);
         return ContributedToTheseBooks;
+    }
+
+    @Override
+
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof Author)) {
+            return false;
+        }
+        Author other = (Author) o;
+        return getPersonID().equals(other.getPersonID());
+
     }
 
 

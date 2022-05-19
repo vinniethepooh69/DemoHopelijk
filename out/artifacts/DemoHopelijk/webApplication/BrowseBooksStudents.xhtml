@@ -8,10 +8,10 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-<ui:composition template="layout_after_login.xhtml">
+<ui:composition template="layout_after_login_student.xhtml">
     <ui:define name="title">Browse Books</ui:define>
     <ui:define name="content">
-        <h:dataTable id="book_view2" value="#{studentFormBean.studentStatefullSessionBean.book}"  border="1">
+        <h:dataTable id="book_view2" value="#{studentFormBean.studentStatefullSessionBean.book}" border="1">
             <h:column>
                 <f:facet name="header">
                     <h:outputText value="Title"/>
@@ -45,100 +45,9 @@
                 </f:facet>
                 <h:outputText value="#{studentFormBean.studentStatefullSessionBean.book.subject}"/>
             </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Available"/>
-                </f:facet>
-                <h:outputText value="#{studentFormBean.studentStatefullSessionBean.book.bookLendByStudentID}"/>
-            </h:column>
 
 
         </h:dataTable>
-
-        <h:panelGrid id = "book_view" columns="2">
-            <h:outputLabel value="bookID: "/>
-            <h:inputText value="#{studentFormBean.studentStatefullSessionBean.bookID}">
-            </h:inputText>
-            <h:outputLabel value="hulp1 : "/>
-            <h:inputText value="#{studentFormBean.studentStatefullSessionBean.hulp1}" >
-
-            </h:inputText>
-            <h:outputLabel value="hulp2 : "/>
-            <h:inputText value="#{studentFormBean.studentStatefullSessionBean.hulp2}" >
-
-            </h:inputText>
-            <h:outputLabel value="invoke counter : "/>
-            <h:inputText value="#{studentFormBean.studentStatefullSessionBean.invokecounter}" >
-
-            </h:inputText>
-            <h:outputLabel value="extra test : "/>
-            <h:inputText value="#{studentFormBean.inlogPassword}">
-
-            </h:inputText>
-
-
-            <h:outputLabel value="extra test voor boek : "/>
-            <h:inputText value="#{studentFormBean.studentStatefullSessionBean.hulp5}">
-
-            </h:inputText>
-
-        <h:outputLabel value="length books student: "/>
-        <h:inputText value="#{studentFormBean.studentStatefullSessionBean.student.lendBooks.size()}">
-
-        </h:inputText>
-
-        <h:outputLabel value="extra test2 : "/>
-        <h:inputText value="#{studentFormBean.studentStatefullSessionBean.book.title_of_Book}">
-
-        </h:inputText>
-
-            <h:outputLabel value="extra test3 : "/>
-            <h:inputText value="#{studentFormBean.studentStatefullSessionBean.hulp3}">
-
-            </h:inputText>
-
-            <h:outputLabel value="extra test4: "/>
-            <h:inputText value="#{studentFormBean.studentStatefullSessionBean.hulp4}">
-
-            </h:inputText>
-
-
-            <h:outputLabel value="number of books lend : "/>
-            <h:inputText value="#{studentFormBean.studentStatefullSessionBean.student.noOfBooksLend}">
-
-            </h:inputText>
-
-            <h:outputLabel value="is managed : "/>
-            <h:inputText value="#{studentFormBean.studentStatefullSessionBean.test12}">
-
-            </h:inputText>
-
-
-            <h:outputLabel value="student nr in satefull : "/>
-            <h:inputText value="#{studentFormBean.studentStatefullSessionBean.student.personUserNumber}">
-
-            </h:inputText>
-
-            <h:outputLabel value="Student name in satefull: "/>
-            <h:inputText value="#{studentFormBean.studentStatefullSessionBean.student.firstName}">
-
-            </h:inputText>
-
-            <h:outputLabel value="Student name in backing: "/>
-            <h:inputText value="#{studentFormBean.student.firstName}">
-
-            </h:inputText>
-
-            <h:outputLabel value="Student name in backing: "/>
-            <h:inputText value="#{studentFormBean.student.firstName}">
-
-            </h:inputText>  <h:outputLabel value="Student department in staefull: "/>
-            <h:inputText value="#{studentFormBean.studentStatefullSessionBean.student.department}">
-
-            </h:inputText>
-
-        </h:panelGrid>
-
         <h:form id="retrieveBook">
 
 
@@ -146,10 +55,6 @@
                 <f:ajax execute="@form" render=":book_view :reservebook :book_view2 :errors"/>
             </h:commandButton>
 
-
-            <h:commandButton value="testeuh" action="#{studentFormBean.studentStatefullSessionBean.updateboek()}">
-                <f:ajax execute="@form" render=":book_view :reservebook :book_view2 :errors"/>
-            </h:commandButton>
 
             <h:commandButton value="Next book" action="#{studentFormBean.nextBook()}">
                 <f:ajax execute="@form" render=":book_view :reservebook :book_view2 :errors"/>
@@ -159,25 +64,13 @@
 
         <h:form id="reservebook">
             <c:choose>
-                <c:when test="#{studentFormBean.studentStatefullSessionBean.book.bookLendByStudentID == 0}">
+                <c:when test="#{studentFormBean.studentStatefullSessionBean.isBookMappedToStudent() == false}">
 
                 <h:panelGrid columns="5">
                     <h:outputLabel value="This books happen to be available, would you like to reserve it: "/>
 
 
                     <h:commandButton value="Reserve it now" action="#{studentFormBean.registerLendOfBook()}">
-                        <f:ajax execute="@form" render=":book_view :reservebook :retrievebook :book_view2 :errors"/>
-                    </h:commandButton>
-
-                    <h:commandButton value="testfunctie" action="#{studentFormBean.studentStatefullSessionBean.updateboek2()}">
-                        <f:ajax execute="@form" render=":book_view :reservebook :retrievebook :book_view2 :errors"/>
-                    </h:commandButton>
-
-                    <h:commandButton value="detach" action="#{studentFormBean.studentStatefullSessionBean.detachstudent()}">
-                        <f:ajax execute="@form" render=":book_view :reservebook :retrievebook :book_view2 :errors"/>
-                    </h:commandButton>
-
-                    <h:commandButton value="attach" action="#{studentFormBean.studentStatefullSessionBean.attachtudent()}">
                         <f:ajax execute="@form" render=":book_view :reservebook :retrievebook :book_view2 :errors"/>
                     </h:commandButton>
                 </h:panelGrid>

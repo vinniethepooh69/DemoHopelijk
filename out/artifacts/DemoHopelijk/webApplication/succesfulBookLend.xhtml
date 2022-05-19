@@ -8,11 +8,11 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-<ui:composition template="layout_after_login.xhtml">
+<ui:composition template="layout_after_login_student.xhtml">
     <ui:define name="title">congratulations!</ui:define>
     <ui:define name="content">
-            <h:outputLabel value="You succesful lend the book titled #{studentFormBean.studentStatefullSessionBean.book.title_of_Book}"/>
-            <h:outputLabel value="You can lend more books by clicking following link:"/>
+            <h:outputLabel value="You succesful lend the book titled: #{studentFormBean.studentStatefullSessionBean.book.title_of_Book}"/>
+            <h:outputLabel value=" You can lend more books by clicking following link:"/>
 
             <h:link value="I want another book!" outcome="BrowseBooksStudents.xhtml"></h:link>
 

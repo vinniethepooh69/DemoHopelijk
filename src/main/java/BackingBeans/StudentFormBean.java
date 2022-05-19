@@ -11,6 +11,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.util.List;
 import java.util.Objects;
 
 @Named
@@ -89,36 +90,48 @@ public class StudentFormBean {
         studentStatefullSessionBean.retrieveBook(1);
 
     }
+
+
+
     public String loginStudent() {
         student = studentEJBBean.Login_student(inlogPassword,inlogStudent);
 
-        if(student.getPersonUserNumber().equals("r0000000"))
+        if(student.getPersonUserNumber().equals(""))
         {
-            student.resetStudentValues();
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR, "LOGIN UNSUCCESFUL" , "Login unsuccesfull"));
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Please try again" , "please try again"));
 
-            return "badInlog.xhtml";
+            return "";
         }
         else{
-            studentStatefullSessionBean.assignStudent(student.getPersonID());
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "LOGIN SUCCESFUL" , "WELCOME"));
+
+            studentStatefullSessionBean.initialisation(student);
+
             //student.resetStudentValues();
             return "goodInlogStudent.xhtml";
         }
 
-        //return "test2.xhtml";
 
 
     }
-
-    public void retrieveAllLendBooksByStudent()
+    public String initialiseBrowsing()
     {
-        inlogPassword = "hoera";
-
-        studentStatefullSessionBean.retrieveAllLendBooksByUser();
+        studentStatefullSessionBean.retrieveBook(0);
+        return "BrowseBooksStudents.xhtml";
     }
 
-    public void returnBook(int index)
+
+
+
+    public String returnBook(int bookid)
     {
-        studentStatefullSessionBean.returnBook(index);
+        studentStatefullSessionBean.returnBook(bookid);
+        return "goodReturnBook.xhtml";
+    }
+    public List<Book> getLendBooks()
+    {
+        return studentStatefullSessionBean.getLendBooks();
     }
 
     public String registerLendOfBook()
@@ -126,11 +139,6 @@ public class StudentFormBean {
         studentStatefullSessionBean.registerLendOfBook();
         return "succesfulBookLend.xhtml";
 
-    }
-
-    public void testfunctie()
-    {
-        studentStatefullSessionBean.testfunctie();
     }
 
     public void resetStudent()

@@ -13,6 +13,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.util.List;
 import java.util.Objects;
 
 @Named
@@ -41,30 +42,25 @@ public class AdminFormBean {
     private Book book= new Book();
 
     private Author author = new Author();
-    private String inlogAdmin="test";
+    private String inlogAdmin;
     private String inlogPassword;
+    private String inlogSecurityCode;
 
-    public void createBook()
-    {
-        inlogAdmin="ietsal";
 
-        AdminEJBBean.createBook(book);
-        FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "student added","This amazing book has been added to our collection, nice job!"));
-        FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Please return to home page before logging in","Let's see how long it takes before it gets reserved :p"));
 
-    }
-
-    public void createAuthor()
+    public String createAuthor()
     {
         boolean b = AdminEJBBean.persistAuthor(author);
         if(b==true)
         {
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "author added","author is succesfully added"));
+            return "goodInlogAdmin.xhtml";
 
         }
         else{
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error","AUTHOR is ARE NOT REGISTERED"));
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Make sure author usernummer is a unique value","Make sure author usernummer is a unique value"));
+            return "goodInlogAdmin.xhtml";
 
 
         }
@@ -73,39 +69,40 @@ public class AdminFormBean {
     }
 
     public void addAdmin() {
-        inlogAdmin = "jaj?";
 
         boolean b = AdminEJBBean.PersistAdmin(admin);
         if(b==true)
         {
-            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "student added","Student is succesfully added"));
-            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Please return to home page before logging in","Student is succesfully added"));
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Admin added","Admin is succesfully added"));
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Please return to home page before logging in","Please return to home page before logging in"));
 
         }
         else{
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error","YOU ARE NOT REGISTERED"));
-            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Make sure studentnumber is a unique value","Student is succesfully added"));
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Make sure Adminnumber is a unique value","Make sure Adminnumber is a unique value"));
 
 
         }
     }
     public String loginAdmin() {
-        admin = AdminEJBBean.Login_Admin(inlogPassword,inlogAdmin);
-
-        if(admin.getPersonUserNumber().equals("r0000000"))
+        admin = AdminEJBBean.Login_Admin(inlogAdmin,inlogPassword,inlogSecurityCode);
+        if(admin.getPersonUserNumber().equals(""))
         {
             admin.resetAdminValues();
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login UNSUCCESFULL","LOGIN WAS UNSUCCESFULL"));
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "TRY AGAIN " , "Return and try again"));
 
-            return "badInlog.xhtml";
+            return "";
         }
         else{
             adminStatefullSessionBean.setAdmin(admin);
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "LOGIN SUCCESFUL" , "WELCOME"));
+
             //student.resetStudentValues();
             return "goodInlogAdmin.xhtml";
         }
 
 
-        //return "test2.xhtml";
 
 
     }
@@ -116,25 +113,55 @@ public class AdminFormBean {
 
     }
 
-    public void persistBook()
+    public List<Author> RetrieveAvailableAuthors()
     {
-        adminStatefullSessionBean.persistBook();
+        return adminStatefullSessionBean.getUnAttachedAuthors();
+    }
+
+    public List<Author> RetrieveAssignedAuthors()
+    {
+        return adminStatefullSessionBean.getAttachedAuthors();
+    }
+
+
+
+
+    public String persistBook()
+    {
+        boolean b= adminStatefullSessionBean.persistBook();
+        if(b==true)
+        {
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Book added","Book is succesfully added"));
+
+        }
+        else{
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR, "Book is NOT REGISTERED","Book is NOT REGISTERED"));
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "An instance using this title: " +book.getTitle_of_Book()+  "already existed","Return and try again"));
+
+
+        }
+        book = new Book();
+        adminStatefullSessionBean.resetValuesregisterBook();
+
+        return "goodInlogAdmin.xhtml";
+    }
+    public List<Author> getAllAuthors()
+    {
+        return adminStatefullSessionBean.getAllAuthors();
     }
     public void assignAuthorToBook(int authorID)
     {
         adminStatefullSessionBean.assignAuthorToBook(authorID);
 
     }
-    public String testfunctie()
+    public void UnassignAuthorToBook(int authorID)
     {
-        resetInlog();
-        return "Home.xhtml";
+        adminStatefullSessionBean.UnassignAuthorToBook(authorID);
+
     }
-    public void resetInlog()
-    {
-        inlogAdmin="";
-        inlogPassword="";
-    }
+
+
+
 
 
     public Author getAuthor() {
@@ -192,4 +219,11 @@ public class AdminFormBean {
     // Getters, setters
 
 
+    public String getInlogSecurityCode() {
+        return inlogSecurityCode;
+    }
+
+    public void setInlogSecurityCode(String inlogSecurityCode) {
+        this.inlogSecurityCode = inlogSecurityCode;
+    }
 }

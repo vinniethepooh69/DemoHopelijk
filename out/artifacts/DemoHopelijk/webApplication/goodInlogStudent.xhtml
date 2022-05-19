@@ -6,19 +6,16 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-<ui:composition template="layout_after_login.xhtml">
+<ui:composition template="layout_after_login_student.xhtml">
     <ui:define name="title" >Welcome</ui:define>
     <ui:define name="content">
         <h:form id="bookForm">
             <h:outputText value="Welcome #{studentFormBean.studentStatefullSessionBean.student.firstName}"/>
             <h:panelGrid columns="2">
                 <h:outputLabel value="Browse books : "/>
-                <h:link outcome="BrowseBooksStudents.xhtml" value="Browse books"/>
-                <h:outputLabel value="Change password : "/>
-                <h:link outcome="ChangePasswordStudents.xhtml" value="Change password"/>
+                <h:commandLink action="#{studentFormBean.initialiseBrowsing()}" value="Browse books"/>
                 <h:outputLabel value="Books you have currently lend + possibility to return it : "/>
-                <h:link outcome="ReturnBooks.xhtml" value="Report a problem to an admin"/>
-                <h:outputLabel value="Books you have currently lend : "/>
+                <h:link outcome="ReturnBooks.xhtml" value="Return book"/>
 
             </h:panelGrid>
 

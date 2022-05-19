@@ -8,20 +8,13 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-<ui:composition template="layout_after_login.xhtml">
+<ui:composition template="layout_after_login_student.xhtml">
     <ui:define name="title">Browse Books</ui:define>
     <ui:define name="content">
 
 
-        <h:form id="retrieveBook">
 
-
-            <h:commandButton value="retrieve all books" action="#{studentFormBean.retrieveAllLendBooksByStudent()}">
-                <f:ajax execute="@form" render=":book_view :reservebook :retrievebook :book_view2 :errors"/>
-            </h:commandButton>
-        </h:form>
-
-        <h:dataTable id="book_view2" value="#{studentFormBean.studentStatefullSessionBean.student.lendBooks}" var="book_value"  border="1">
+        <h:dataTable id="book_view2" value="#{studentFormBean.getLendBooks()}" var="book_value"  border="1">
             <h:column>
                 <f:facet name="header">
                     <h:outputText value="Title"/>
@@ -55,34 +48,18 @@
                 </f:facet>
                 <h:outputText value="#{book_value.subject}"/>
             </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Available"/>
-                </f:facet>
-                <h:outputText value="#{book_value.bookLendByStudentID}"/>
-            </h:column>
+
 
             <h:column>
-                <h:commandButton value="Return this book" action="#{studentFormBean.studentStatefullSessionBean.returnBook(studentFormBean.studentStatefullSessionBean.student.lendBooks.indexOf(book_value))}">
+                <h:form id="test">
+
+                <h:commandButton value="Return this book" action="#{studentFormBean.returnBook(book_value.bookID)}">
                     <f:ajax execute="@form" render=":book_view :reservebook :retrievebook :book_view2 :errors"/>
                 </h:commandButton>
-
+                </h:form>
             </h:column>
         </h:dataTable>
-        <h:panelGrid id = "book_view" columns="2">
-        <h:outputLabel value="size of lend books: "/>
-        <h:inputText value="#{studentFormBean.studentStatefullSessionBean.student.lendBooks.size()}">
-        </h:inputText>
-        <h:outputLabel value="hulp4 : "/>
-        <h:inputText value="#{studentFormBean.studentStatefullSessionBean.hulp4}" >
 
-        </h:inputText>
-
-            <h:outputLabel value="hulp3 : "/>
-            <h:inputText value="#{studentFormBean.studentStatefullSessionBean.hulp3}" >
-
-            </h:inputText>
-        </h:panelGrid>
     </ui:define>
 </ui:composition>
 </html>

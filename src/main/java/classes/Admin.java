@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-@NamedQuery(name = "findAdminWithParam", query = "SELECT a FROM Admin a where a.personUserNumber=:fname")
+@NamedQuery(name = "findAdminWithAdminUserNumber", query = "SELECT a FROM Admin a where a.personUserNumber=:fname")
 
 @Entity
 @Table(name="Admin")
@@ -24,7 +24,7 @@ public class Admin extends Person{
     public Admin()
     {
         super();
-        securityCode="5424";
+        securityCode="";
 
     }
     public Admin(String studentnumbervalue, String Emailvalue, String number, String Passwordvalue,String firstnamevalue, String lastNamemvalue, String Securitycode)
@@ -35,7 +35,7 @@ public class Admin extends Person{
     }
     public void resetAdminValues() {
         resetpersonvalues();
-        securityCode = "5424";
+        securityCode = "";
 
     }
 

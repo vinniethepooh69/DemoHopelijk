@@ -2,14 +2,20 @@ package classes;
 
 
 import jakarta.persistence.*;
-
+import classes.Book;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.ALL;
+
+@NamedQuery(name = "findBookIDValues", query = "SELECT b.BookID FROM Book b")
+@NamedQuery(name = "findBookbyBookTitle", query = "SELECT b FROM Book b where b.title_of_Book =:fname")
 @NamedQuery(name = "findBookbyBookID", query = "SELECT b FROM Book b where b.BookID = ?1")
-@NamedQuery(name = "findBooksbyStudentID", query = "SELECT b FROM Book b where b.BookLendByStudentID =?1")
+@NamedQuery(name = "findBooksbyStudentID", query = "SELECT b FROM Book b where b.student.personID =?1")
+@NamedQuery(name = "findMinBookID", query = "SELECT min(b.BookID) FROM Book b")
+
 @Entity
 @Table(name="Book")
 public class Book {
@@ -28,19 +34,22 @@ public class Book {
     @Temporal(TemporalType.DATE)
     private Date lendDate;
 
+    @ManyToOne
+    //@JoinColumn(name="STUDENT_PERSONID" ,nullable = true)
+    private Student student;
 
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
 
     @ManyToMany
     @JoinTable(name = "JoinTableBookIDAuthorID", joinColumns = @JoinColumn(name = "BookID"), inverseJoinColumns = @JoinColumn(name = "AuthorIS"))
     private List<Author> createdByAuthors;
-    public Integer getBookLendByStudentID() {
-        return BookLendByStudentID;
-    }
 
-    public void setBookLendByStudentID(Integer bookLendByStudentID) {
-        BookLendByStudentID = bookLendByStudentID;
-    }
-    private Integer BookLendByStudentID;
 
     public List<Author> getCreatedByAuthors() {
         return createdByAuthors;
@@ -56,13 +65,12 @@ public class Book {
         createdByAuthors.add(createdByAuthors.size(),author);
         }
     }
-
-    public Date getLendDate() {
-        return lendDate;
-    }
-
-    public void setLendDate(Date lendDate) {
-        this.lendDate = lendDate;
+    public void removeAuthor(Author author)
+    {
+        if(createdByAuthors.contains(author))
+        {
+            createdByAuthors.remove(author);
+        }
     }
 
     public Book()
@@ -72,7 +80,6 @@ public class Book {
         language="";
         subject="";
         fiction=false;
-        BookLendByStudentID = null;
         lendDate = null;
         createdByAuthors= new ArrayList<Author>();
     }
@@ -84,6 +91,27 @@ public class Book {
         subject=subjectvalue;
         fiction=fictionvalue;
     }
+
+    @Override
+
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof Book)) {
+            return false;
+        }
+        Book other = (Book) o;
+        return getBookID() == (other.getBookID());
+
+    }
+
+    public Date getLendDate() {
+        return lendDate;
+    }
+
+    public void setLendDate(Date lendDate) {
+        this.lendDate = lendDate;
+    }
+
 
     public String getTitle_of_Book() {
         return title_of_Book;

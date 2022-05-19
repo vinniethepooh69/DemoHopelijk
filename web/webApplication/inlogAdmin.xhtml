@@ -15,14 +15,16 @@
         <h:form id="studentForm">
             <h:panelGrid columns="2">
                 <h:outputLabel value="AdminID : "/>
-                <h:inputText value="#{studentFormBean.inlogStudent}"/>
+                <h:inputText value="#{adminFormBean.inlogAdmin}"/>
                 <h:outputLabel value="password : "/>
-                <h:inputSecret value="#{studentFormBean.inlogPassword}"/>
+                <h:inputSecret value="#{adminFormBean.inlogPassword}"/>
+                <h:outputLabel value="SecurityCode : "/>
+                <h:inputSecret value="#{adminFormBean.inlogSecurityCode}"/>
 
             </h:panelGrid>
 
             <h:commandButton value="Login" action="#{adminFormBean.loginAdmin()}"/>
         </h:form>
-    </ui:define>
+   </ui:define>
 </ui:composition>
 </html>

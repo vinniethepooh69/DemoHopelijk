@@ -5,6 +5,8 @@ import classes.Book;
 import jakarta.ejb.Stateful;
 import jakarta.enterprise.context.SessionScoped;
 import java.util.Date;
+
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -28,215 +30,105 @@ public class StudentStatefullSessionBean implements Serializable {
     EntityManager em;
     private Student student;
 
-    private int hulp5;
+    @Inject
+    private StudentEJBBean studentEJBBean;
 
-    public int getHulp5() {
-        return hulp5;
-    }
 
-    public void setHulp5(int hulp5) {
-        this.hulp5 = hulp5;
-    }
+    private List<Integer> BookIDValues;
 
-    public int getBookID() {
-        return bookID;
-    }
-
-    public void setBookID(int bookID) {
-        this.bookID = bookID;
-    }
-
-    int bookID;
 
     private Book book;
 
-    public int getHulp1() {
-        return hulp1;
-    }
-
-    public void setHulp1(int hulp1) {
-        this.hulp1 = hulp1;
-    }
-
-    public int getHulp2() {
-        return hulp2;
-    }
-
-    public void setHulp2(int hulp2) {
-        this.hulp2 = hulp2;
-    }
-
-    public int getInvokecounter() {
-        return invokecounter;
-    }
-
-    public void setInvokecounter(int invokecounter) {
-        this.invokecounter = invokecounter;
-    }
-
-    private int invokecounter;
-
-    private int hulp1;
-    private int hulp2;
-
-    public int getHulp3() {
-        return hulp3;
-    }
-
-    public void setHulp3(int hulp3) {
-        this.hulp3 = hulp3;
-    }
-
-    private int hulp3;
-    private String hulp4;
     /*public List<Book> showAllBooksLend()
-    {
-        List<Book> a =
-        return
-    }*/
+        {
+            List<Book> a =
+            return
+        }*/
+    private int index_list;
 
-    public String getHulp4() {
-        return hulp4;
-    }
 
-    public void setHulp4(String hulp4) {
-        this.hulp4 = hulp4;
-    }
-    public void yolo()
+    public void initialisation(Student studentvalue)
     {
-        hulp3=student.getPersonID();
-        hulp4 = student.getPersonUserNumber();
-    }
-
-    public void retrieveAllLendBooksByUser()
-    {
-        hulp4 = "heeeee";
-        TypedQuery<Book> query = em.createNamedQuery("findBooksbyStudentID",Book.class).setParameter("1",student.getPersonID());
-        hulp3 = query.getResultList().size();
-        student.setLendBooks(query.getResultList());
+        student = studentvalue;
+        index_list = 0;
+        setBookIDValues(studentEJBBean.getBookIDValues());
+        book = new Book();
 
     }
     public void registerLendOfBook()
     {
         //student= em.find(Student.class,student.getPersonID());
-        em.merge(student);
-        if(em.contains(student))
-        {
-            student.setDepartment("En deze zegt ook al contains");
-        }
-        else{student.setDepartment("En deze zegt van niet");}
-        hulp3 = student.getPersonID();
-        hulp4 =student.getFirstName();
+
         book.setLendDate(new Date());
         student.addBook(book);
         student.setNoOfBooksLend(student.getNoOfBooksLend()+1);
+        //book.setStudent(student);
         em.merge(student);
         em.flush();
 
     }
 
-    public void updateboek()
-    {
-        setBook(em.find(Book.class,bookID));
-        hulp5= book.getBookLendByStudentID();
 
+    public List<Book> getLendBooks()
+    {
+        return student.getLendBooks();
     }
-
-    public void updateboek2()
+    public void returnBook(int bookid)
     {
-        book =(em.find(Book.class,bookID));
-        hulp5= book.getBookLendByStudentID();
-
-    }
-
-
-    public void returnBook(int index)
-    {
-        hulp4 = "returnedbookid"+index;
-        Book book = student.getLendBooks().remove(index);
+        //book.setLendDate(null);
+        //book.setStudent(null);
+        book = em.find(Book.class,bookid);
         book.setLendDate(null);
+        student.removeBook(book);
         student.setNoOfBooksLend(student.getLendBooks().size());
         em.merge(student);
-
-    }
-    public boolean isTest12() {
-        return test12;
-    }
-
-    public void setTest12(boolean test12) {
-        this.test12 = test12;
-    }
-
-    private boolean test12;
-    public void testmanaged()
-    {
-        test12= em.contains(student);
-    }
-    public void detachstudent()
-    {
-        em.clear();
-        testmanaged();
-    }
-    public void attachtudent()
-    {
-        em.merge(student);
-        testmanaged();
-    }
-
-    public void testfunctie()
-    {
-        student.setDepartment("Gelukt");
+        //em.merge(book);
         em.flush();
+
     }
 
-    public Book retrieveBook(int IDchange)
+
+    public void retrieveBook(int IDchange)
     {
         //TypedQuery<Book> query = em.createNamedQuery("findBookbyBookID",Book.class).setParameter("1",2);
         //return query.getSingleResult();
 
-        invokecounter +=1;
-        bookID += IDchange;
-        if(bookID==0)
-        {bookID=1;}
-        TypedQuery<Book> query = em.createNamedQuery("findBookbyBookID",Book.class).setParameter("1",bookID);
+        index_list += IDchange;
+        if(index_list<0)
+        {index_list=0;}
+        else if(index_list>=getBookIDValues().size())
+        {index_list = getBookIDValues().size()-1;}
+        TypedQuery<Book> query = studentEJBBean.returnBookQuery(getBookIDValues().get(index_list));
 
         //Query query = em.createNamedQuery("findStudentWithParam",Student.class);
         //query.setParameter("fname",student.getPersonUserNumber());
 
         if(query.getResultList().size()==0)
         {
-            bookID -=IDchange;
             book=new Book();
 
         }
         else {
             book=query.getSingleResult();
-            }
-        hulp1 = bookID;
-        hulp2 = book.getBookLendByStudentID();
-        return book;
+        }
+
+    }
+
+    public boolean isBookMappedToStudent()
+    {
+        if(book.getStudent() != null)
+        {return true;}
+        else{return false;}
     }
 
 
 
     public Book retrievefirstbook()
     {
-        TypedQuery<Book> query = em.createNamedQuery("findBookbyBookID",Book.class).setParameter("1",2);
-        return query.getSingleResult();
+        return studentEJBBean.retrievefirstbook();
     }
-    public void LendBookByStudent()
-    {
- //       student.addBook(book);
-    }
-    public void assignStudent(int studentvalue)
-    {
-        student=em.find(Student.class,studentvalue);
-        if(em.contains(student))
-        {
-            student.setDepartment("deze zegt wel contains");
-        }
 
-    }
+
 
     public Student getStudent() {
         return student;
@@ -252,6 +144,24 @@ public class StudentStatefullSessionBean implements Serializable {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+
+    public List<Integer> getBookIDValues() {
+        return BookIDValues;
+    }
+
+    public void setBookIDValues(List<Integer> bookIDValues) {
+        BookIDValues = bookIDValues;
+    }
+
+
+    public int getIndex_list() {
+        return index_list;
+    }
+
+    public void setIndex_list(int index_list) {
+        this.index_list = index_list;
     }
 
 }

@@ -6,7 +6,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<ui:composition template="layout_minimal.xhtml">
+<ui:composition template="layout_after_login_admin.xhtml">
     <ui:define name="content">
 
     <h1>Create a book</h1>
@@ -45,7 +45,7 @@
             </h:commandButton>
             </c:when>
             <c:otherwise>
-                <h:dataTable value="#{adminFormBean.adminStatefullSessionBean.getAllAuthors()}" var="author_value"  border="1">
+                <h:dataTable id="tablestep2" value="#{adminFormBean.RetrieveAvailableAuthors()}" var="author_value"  border="1">
 
                     <h:column>
                         <f:facet name="header">
@@ -78,14 +78,17 @@
                     </h:column>
                     <h:column>
                         <h:commandButton value="Register author" action="#{adminFormBean.assignAuthorToBook(author_value.getPersonID())}">
-                            <f:ajax execute="@form" render=":bookForm :titlerender :extratest :bookform :errors"/>
+                            <f:ajax execute="@form" render=":bookForm :tablestep2 :titlerender :extratest1 :extratest2 :bookform :errors"/>
                         </h:commandButton>
 
                     </h:column>
                 </h:dataTable>
 
+                <br/>
+                <h:outputText value="Here will all registered authors for this book be displayed:"/>
 
-                <h:dataTable value="#{adminFormBean.adminStatefullSessionBean.book.createdByAuthors}" var="author_value"  border="1">
+
+                <h:dataTable value="#{adminFormBean.RetrieveAssignedAuthors()}" var="author_value"  border="1">
 
                     <h:column>
                         <f:facet name="header">
@@ -116,12 +119,17 @@
                         </f:facet>
                         <h:outputText value="#{author_value.getEmail()}"/>
                     </h:column>
+                    <h:column>
+                        <h:commandButton value="Register author" action="#{adminFormBean.UnassignAuthorToBook(author_value.getPersonID())}">
+                            <f:ajax execute="@form" render=":bookForm :tablestep2 :titlerender :extratest1 :extratest2 :bookform :errors"/>
+                        </h:commandButton>
 
+                    </h:column>
                 </h:dataTable>
 
 
                 <h:commandButton value="Next page!" action="#{adminFormBean.persistBook()}">
-                    <f:ajax execute="@form" render=":bookForm :titlerender :extratest :errors"/>
+                    <f:ajax execute="@form" render=":bookForm :titlerender :extratest1 :extratest2 :errors"/>
                 </h:commandButton>
 
 
@@ -130,7 +138,6 @@
             </c:choose>
 
         </h:form>
-        <h:outputLabel id="extratest" value="#{adminFormBean.adminStatefullSessionBean.continueForm}"/>
     </ui:define>
 </ui:composition>
 </html>

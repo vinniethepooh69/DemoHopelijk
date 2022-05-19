@@ -1,13 +1,11 @@
 package classes;
 
 import jakarta.persistence.*;
-import jakarta.ws.rs.DefaultValue;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-@NamedQuery(name = "findStudentWithParam", query = "SELECT s FROM Student s where s.personUserNumber=:fname")
+@NamedQuery(name = "findStudentByUserNumber", query = "SELECT s FROM Student s where s.personUserNumber=:fname")
 
 @Entity
 @Table(name="Student")
@@ -18,16 +16,26 @@ public class Student extends Person {
 
     private String Department;
 
+    public boolean isInlogStatus() {
+        return InlogStatus;
+    }
 
-    @OneToMany(fetch = FetchType.LAZY , cascade = CascadeType.MERGE)
-    @JoinColumn(name="BookLendByStudentID" ,nullable = true)
+    public void setInlogStatus(boolean inlogStatus) {
+        InlogStatus = inlogStatus;
+    }
+
+    @Transient
+    private boolean InlogStatus;
+
+    @OneToMany( cascade = CascadeType.ALL , mappedBy = "student")
+    @JoinColumn(name="STUDENT_PERSONID" ,nullable = true)
     private List<Book> LendBooks;
 
     public Student()
     {   super();
 
         NoOfBooksLend = 0;
-        Department = "none";
+        Department = "";
         LendBooks = new ArrayList<Book>();
 
 
@@ -43,7 +51,7 @@ public class Student extends Person {
     public void resetStudentValues() {
         resetpersonvalues();
         NoOfBooksLend = 0;
-        Department = "none";
+        Department = "";
     }
 
 
@@ -66,12 +74,20 @@ public class Student extends Person {
     public List<Book> getLendBooks() {
         return LendBooks;
     }
-    public List<Book> addBook(Book bookvalue)
+    public void addBook(Book bookvalue)
     {
-        LendBooks.add(LendBooks.size(),bookvalue);
-        return LendBooks;
-    }
+        bookvalue.setStudent(this);
 
+        LendBooks.add(bookvalue);
+
+    }
+    public void removeBook(Book bookvalue)
+    {
+
+        LendBooks.remove(bookvalue);
+        bookvalue.setStudent(null);
+
+    }
     public void setLendBooks(List<Book> lendBooks) {
         LendBooks = lendBooks;
     }
