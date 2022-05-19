@@ -9,6 +9,7 @@
     <properties>
         <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
         <property name="eclipselink.query-results-cache" value="false"/>
+        <property name="eclipselink.logging.level" value="FINE"/>
     </properties>
     </persistence-unit>
 </persistence>

@@ -19,8 +19,7 @@ public class Student extends Person {
     private String Department;
 
 
-    @OneToMany(fetch = FetchType.LAZY , cascade = CascadeType.MERGE)
-    @JoinColumn(name="BookLendByStudentID" ,nullable = true)
+    @OneToMany( cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "student")
     private List<Book> LendBooks;
 
     public Student()

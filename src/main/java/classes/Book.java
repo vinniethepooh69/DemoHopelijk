@@ -2,14 +2,18 @@ package classes;
 
 
 import jakarta.persistence.*;
-
+import classes.Book;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 @NamedQuery(name = "findBookbyBookID", query = "SELECT b FROM Book b where b.BookID = ?1")
-@NamedQuery(name = "findBooksbyStudentID", query = "SELECT b FROM Book b where b.BookLendByStudentID =?1")
+@NamedQuery(name = "findBooksbyStudentID", query = "SELECT b FROM Book b where b.student.personID =?1")
+@NamedQuery(name = "findMinBookID", query = "SELECT min(b.BookID) FROM Book b")
+
 @Entity
 @Table(name="Book")
 public class Book {
@@ -28,19 +32,23 @@ public class Book {
     @Temporal(TemporalType.DATE)
     private Date lendDate;
 
+    @ManyToOne
+    @JoinColumn(name="personID" ,nullable = true)
 
+    private Student student;
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
 
     @ManyToMany
     @JoinTable(name = "JoinTableBookIDAuthorID", joinColumns = @JoinColumn(name = "BookID"), inverseJoinColumns = @JoinColumn(name = "AuthorIS"))
     private List<Author> createdByAuthors;
-    public Integer getBookLendByStudentID() {
-        return BookLendByStudentID;
-    }
 
-    public void setBookLendByStudentID(Integer bookLendByStudentID) {
-        BookLendByStudentID = bookLendByStudentID;
-    }
-    private Integer BookLendByStudentID;
 
     public List<Author> getCreatedByAuthors() {
         return createdByAuthors;
@@ -72,7 +80,6 @@ public class Book {
         language="";
         subject="";
         fiction=false;
-        BookLendByStudentID = null;
         lendDate = null;
         createdByAuthors= new ArrayList<Author>();
     }

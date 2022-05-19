@@ -28,6 +28,16 @@ public class StudentStatefullSessionBean implements Serializable {
     EntityManager em;
     private Student student;
 
+
+    public int getLowestBookID() {
+        return lowestBookID;
+    }
+
+    public void setLowestBookID(int lowestBookID) {
+        this.lowestBookID = lowestBookID;
+    }
+
+    private int lowestBookID;
     private int hulp5;
 
     public int getHulp5() {
@@ -46,7 +56,7 @@ public class StudentStatefullSessionBean implements Serializable {
         this.bookID = bookID;
     }
 
-    int bookID;
+    private int bookID = lowestBookID;
 
     private Book book;
 
@@ -104,7 +114,7 @@ public class StudentStatefullSessionBean implements Serializable {
     }
     public void yolo()
     {
-        hulp3=student.getPersonID();
+
         hulp4 = student.getPersonUserNumber();
     }
 
@@ -116,38 +126,32 @@ public class StudentStatefullSessionBean implements Serializable {
         student.setLendBooks(query.getResultList());
 
     }
+
+    public void initialisation()
+    {
+        book = new Book();
+
+    }
     public void registerLendOfBook()
     {
         //student= em.find(Student.class,student.getPersonID());
         em.merge(student);
-        if(em.contains(student))
+        if(em.contains(book))
         {
             student.setDepartment("En deze zegt ook al contains");
         }
         else{student.setDepartment("En deze zegt van niet");}
-        hulp3 = student.getPersonID();
+
         hulp4 =student.getFirstName();
         book.setLendDate(new Date());
         student.addBook(book);
         student.setNoOfBooksLend(student.getNoOfBooksLend()+1);
+        book.setStudent(student);
         em.merge(student);
         em.flush();
 
     }
 
-    public void updateboek()
-    {
-        setBook(em.find(Book.class,bookID));
-        hulp5= book.getBookLendByStudentID();
-
-    }
-
-    public void updateboek2()
-    {
-        book =(em.find(Book.class,bookID));
-        hulp5= book.getBookLendByStudentID();
-
-    }
 
 
     public void returnBook(int index)
@@ -189,15 +193,16 @@ public class StudentStatefullSessionBean implements Serializable {
         em.flush();
     }
 
-    public Book retrieveBook(int IDchange)
+    public void retrieveBook(int IDchange)
     {
         //TypedQuery<Book> query = em.createNamedQuery("findBookbyBookID",Book.class).setParameter("1",2);
         //return query.getSingleResult();
 
         invokecounter +=1;
         bookID += IDchange;
-        if(bookID==0)
-        {bookID=1;}
+        if(bookID<lowestBookID)
+        {bookID=lowestBookID;}
+        hulp1 = bookID;
         TypedQuery<Book> query = em.createNamedQuery("findBookbyBookID",Book.class).setParameter("1",bookID);
 
         //Query query = em.createNamedQuery("findStudentWithParam",Student.class);
@@ -205,16 +210,23 @@ public class StudentStatefullSessionBean implements Serializable {
 
         if(query.getResultList().size()==0)
         {
-            bookID -=IDchange;
+//            bookID -=IDchange;
             book=new Book();
 
         }
         else {
             book=query.getSingleResult();
-            }
-        hulp1 = bookID;
-        hulp2 = book.getBookLendByStudentID();
-        return book;
+            System.out.println("book loaded: " + book.getStudent() + "::" +  book.getBookID());
+            book=query.getSingleResult();
+        }
+
+    }
+
+    public boolean isBookMappedToStudent()
+    {
+        if(book.getStudent() != null)
+        {return true;}
+        else{return false;}
     }
 
 
