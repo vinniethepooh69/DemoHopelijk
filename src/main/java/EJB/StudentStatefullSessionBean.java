@@ -121,7 +121,15 @@ public class StudentStatefullSessionBean implements Serializable {
         else{return false;}
     }
 
+    private String teststring;
 
+    public String getTeststring() {
+        return teststring;
+    }
+
+    public void setTeststring(String teststring) {
+        this.teststring = teststring;
+    }
 
     public Book retrievefirstbook()
     {

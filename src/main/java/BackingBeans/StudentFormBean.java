@@ -10,7 +10,8 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-
+import jakarta.interceptor.Interceptors;
+import EJB.LoggerBeanBean;
 import java.util.List;
 import java.util.Objects;
 
@@ -92,7 +93,6 @@ public class StudentFormBean {
     }
 
 
-
     public String loginStudent() {
         student = studentEJBBean.Login_student(inlogPassword,inlogStudent);
 
@@ -107,6 +107,7 @@ public class StudentFormBean {
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "LOGIN SUCCESFUL" , "WELCOME"));
 
             studentStatefullSessionBean.initialisation(student);
+            studentEJBBean.succesful(student.getFirstName() + " " +student.getLastName());
 
             //student.resetStudentValues();
             return "goodInlogStudent.xhtml";

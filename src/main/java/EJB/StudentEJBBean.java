@@ -5,6 +5,7 @@ import classes.Student;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.inject.Typed;
 import jakarta.inject.Named;
+import jakarta.interceptor.Interceptors;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -55,6 +56,7 @@ public class StudentEJBBean {
     {
         return em.createNamedQuery("findBookIDValues").getResultList();
     }
+
     public Student Login_student(String password, String studentNumber)
     {
         Query query = em.createNamedQuery("findStudentByUserNumber",Student.class);
@@ -64,8 +66,8 @@ public class StudentEJBBean {
             Student hulpstudent = (Student) query.getSingleResult();
             if((hulpstudent.getPassword()).equals(password))
             {
-
                 return hulpstudent;
+
                 }
             else{
                 return new Student();}
@@ -80,5 +82,10 @@ public class StudentEJBBean {
         //em.find(Student.class,)
     }
 
+    @Interceptors(LoggerBeanBean.class)
+    public void succesful(String student)
+    {
+
+    }
 
 }

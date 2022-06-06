@@ -27,7 +27,7 @@ public class Student extends Person {
     @Transient
     private boolean InlogStatus;
 
-    @OneToMany( cascade = CascadeType.ALL , mappedBy = "student")
+    @OneToMany( cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "student")
     @JoinColumn(name="STUDENT_PERSONID" ,nullable = true)
     private List<Book> LendBooks;
 
